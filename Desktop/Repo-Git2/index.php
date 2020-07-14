@@ -8,5 +8,9 @@
 <body>
     <h1>test remote git</h1>
     <h3>boleh dicoba lagi</h3>
+    <ul>
+        <li>satu</li>
+        <li>dua</li>
+    </ul>
 </body>
 </html>
