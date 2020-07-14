@@ -59,7 +59,9 @@ app.get('/express/admin/home', adminku.home);
 app.get('/express/admin/add_news', adminku.add_news);
 app.post('/express/admin/add_news', adminku.process_add_news);
 app.get('/express/admin/edit_news/:id_news', adminku.edit_news);
-app.post('/express/admin/edit_news/:id_news', adminku.edit_news);
+app.post('/express/admin/edit_news/:id_news', adminku.process_edit_news);
+app.get('/express/admin/delete_news/:id_news', adminku.delete_news);
+app.get('/express/admin/logout', adminku.logout);
 
 app.listen(app.get('port'), function () {
     console.log('Server is running on port ' + app.get('port'));

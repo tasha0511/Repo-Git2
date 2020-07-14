@@ -14,8 +14,8 @@ exports.login = function (req, res) {
 
         // 2. tangkap nilai atribut name dari form input username dan password
         var name = post.username;
-        //var pass = post.password;
 
+        //var pass = post.password;
         var pass = md5(post.password);
 
         // 3. lakukan koneksi dan query data admin
@@ -75,6 +75,15 @@ exports.home = function (req, res) {
 }
 
 exports.add_news = function (req, res) {
+    var admin = req.session.admin;
+    var adminId = req.session.adminId;
+    console.log('id_admin=' + adminId);
+
+    if (adminId == null) {
+        res.redirect('/express/admin/login');
+        return;
+    }
+
     res.render('./admin/home', {
         pathname: 'add_news'
     });
@@ -125,6 +134,15 @@ exports.process_add_news = function (req, res) {
 
 
 exports.edit_news = function (req, res) {
+    var admin = req.session.admin;
+    var adminId = req.session.adminId;
+    console.log('id_admin=' + adminId);
+
+    if (adminId == null) {
+        res.redirect('/express/admin/login');
+        return;
+    }
+
     // tangkap id news dari link edit
     var id_news = req.params.id_news;
 
@@ -174,11 +192,11 @@ exports.process_edit_news = function (req, res) {
             var post = {
                 title: req.body.title,
                 description: req.body.description,
-                images: req.file.filename,
+                images: image,
                 createdate: date
             }
 
-            // console.log(post);
+            console.log(post);
             
             var sql = "update news_tbl set ? where id_news=?";
 
@@ -188,10 +206,32 @@ exports.process_edit_news = function (req, res) {
                 if (err) {
                     console.log('error edit news: %s', err);
                 }
-                // req.flash('info', 'Success edit data! Data has been updated.');
+                req.flash('info', 'Success edit data! Data has been updated.');
                 res.redirect('/express/admin/home');
             });
         });
     });
 }
 
+exports.delete_news = function (req, res) {
+    // tangkap id news dari link edit
+    var id_news = req.params.id_news;
+
+    req.getConnection(function (err, connect) {
+        var sql = "delete from news_tbl where id_news=?";
+
+        var query = connect.query(sql, id_news, function (err, results) {
+            if (err) {
+                console.log('error delete news: %s', err);
+            }
+
+            res.redirect('/express/admin/home');
+        });
+    });
+}
+
+exports.logout = function (req, res) {
+    req.session.destroy(function (err) {
+        res.redirect('/express/admin/login');
+    });
+}

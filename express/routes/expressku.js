@@ -27,7 +27,6 @@ exports.news = function (req, res) {
             });
         });
     });
-    //res.render('news');
 }
 
 exports.news_detail = function (req, res) {
